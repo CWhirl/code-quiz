@@ -51,19 +51,36 @@ function reloadQuestions () {
     return questionOptions.indexOf(questionObject);
 }
 
+function saveScore (value) {
+    localStorage.setItem('score', value)
+}
+
 $('#submissionButton').on('click', function () {
     if (evalAnswer(questionOptions[reloadQuestions()], $('#answerDropDown').val())) {
-        console.log("Correct!!");
+        saveScore(localStorage.getItem(score) + 5);
     } else {
-        console.log("Incorrect!!");
+        saveScore(localStorage.getItem(score) - 5);
     }
-
     if (questionOptions.indexOf(questionObject) == 3) {
         return
     }
-
     questionObject = questionOptions[questionOptions.indexOf(questionObject) + 1];
     reloadQuestions();
 });
+
+function setTime() {
+    // Sets interval in variable
+    var timerInterval = setInterval(function() {
+      secondsLeft--;
+      $('#timer').text(`Time Remaining: ${secondsLeft}`);
+  
+      if(secondsLeft === 0) {
+        
+      }
+  
+    }, 1000);
+  }
+
+
 
 reloadQuestions();
