@@ -33,6 +33,9 @@ var questionFour = {
 var questionOptions = [questionOne, questionTwo, questionThree, questionFour];
 var questionObject = questionOptions[0];
 
+var secondsLeft = 50;
+var score = 0;
+
 
 function evalAnswer (question, submission) {
     if (question.correctValue == submission) {
@@ -52,16 +55,23 @@ function reloadQuestions () {
 }
 
 function saveScore (value) {
-    localStorage.setItem('score', value)
+    localStorage.setItem("score", value)
 }
 
 $('#submissionButton').on('click', function () {
     if (evalAnswer(questionOptions[reloadQuestions()], $('#answerDropDown').val())) {
-        saveScore(localStorage.getItem(score) + 5);
+        score = score + 5;
+        saveScore(score);
+
     } else {
-        saveScore(localStorage.getItem(score) - 5);
+        secondsLeft = secondsLeft - 5;
+
     }
+
+    $('#score').text(`Score: ${score}`);
+
     if (questionOptions.indexOf(questionObject) == 3) {
+        saveInitials();
         return
     }
     questionObject = questionOptions[questionOptions.indexOf(questionObject) + 1];
@@ -75,12 +85,20 @@ function setTime() {
       $('#timer').text(`Time Remaining: ${secondsLeft}`);
   
       if(secondsLeft === 0) {
-        
+        clearInterval(timerInterval);
+        saveScore(score);
+        saveInitials();
       }
   
     }, 1000);
   }
 
+function saveInitials () {
+    localStorage.setItem("initials", window.prompt("Enter your initials"));
+    window.location.href="assets/high-scores.html";
+}
 
 
+window.alert("Click continue to start the quiz.");
 reloadQuestions();
+setTime();
